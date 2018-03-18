@@ -1,9 +1,5 @@
-const videoTagId = "video";
-const texCanvasId = "texCanvas";
-const displayCanvasId = "webglCanvas";
-
 const draw = (streamsContainer, time = 0) => {
-  drawVideo(streamsContainer, time);
+  drawTexture(streamsContainer, time);
   // drawInterface(streamsContainer, time);
   requestAnimationFrame(time => draw(streamsContainer, time));
 };
