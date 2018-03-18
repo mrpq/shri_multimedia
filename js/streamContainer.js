@@ -5,6 +5,7 @@ class StreamContainer {
         throw new Error("Video tag selector missing");
       }
       this.initVideoStream(mediaStream, selector);
+      this.initAudioStream(mediaStream);
     }
   }
 
@@ -31,15 +32,15 @@ class StreamContainer {
   }
 
   analyseAudioFrequencyData() {
-    const array = new Uint8Array(this.analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(array);
+    const array = new Uint8Array(this.audioAnalyser.frequencyBinCount);
+    this.audioAnalyser.getByteFrequencyData(array);
     this.frequencyData = array;
     return this.frequencyData;
   }
 
-  getAverageVolume(array) {
+  calculateAverageVolume(array) {
     let values = 0;
-    let length = array;
+    let length = array.length;
     for (let i = 0; i < length; i++) {
       values += array[i];
     }

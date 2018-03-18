@@ -31,6 +31,18 @@ const drawRunningText = (
   }
 };
 
+const drawAverageVolume = (average, ctx) => {
+  ctx.clearRect(510, 0, 200, 200);
+  ctx.fillStyle = "rgb(255,255,255)";
+  ctx.fillRect(512, 0, average * 2, 25);
+};
+
+const drawAudioVisuals = (ctx, streamsContainer) => {
+  const freaquencyData = streamsContainer.analyseAudioFrequencyData();
+  const averageVolume = streamsContainer.calculateAverageVolume(freaquencyData);
+  drawAverageVolume(averageVolume, ctx);
+};
+
 const drawTextLines = params => {
   const { ctx, fontSize = 13, maxLines = 5, text, position } = params;
   ctx.font = `bold ${fontSize}px Courier`;
@@ -48,4 +60,5 @@ const drawTexture = (streamsContainer, time) => {
   const ctx = canvas.getContext("2d");
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   drawRunningText(ctx, "#ffffff", canvas.width, canvas.height, time);
+  drawAudioVisuals(ctx, streamsContainer);
 };
