@@ -34,13 +34,29 @@ const drawRunningText = (
 const drawAverageVolume = (average, ctx) => {
   ctx.clearRect(510, 0, 200, 200);
   ctx.fillStyle = "rgb(255,255,255)";
-  ctx.fillRect(512, 0, average * 2, 25);
+  ctx.fillRect(512, 0, average * 2, 20);
+};
+
+const drawFrequencies = (freaquencyData, ctx, ancor) => {
+  // array = array.slice(0, Math.floor(array.length / 4));
+  freaquencyData = freaquencyData.slice(0, 500);
+  const frequenciesBoxWidth = 140;
+  const barWidth = frequenciesBoxWidth / freaquencyData.length;
+  console.log(barWidth);
+  for (let i = 0; i < freaquencyData.length; i += 1) {
+    const k = 6;
+    const level = freaquencyData[i] / k;
+    ctx.fillRect(512 + i * barWidth, ancor - level, 1, level);
+    ctx.fillRect(512 + i * barWidth, ancor, 1, level);
+    // audioCanvasCtx.fillRect(i);
+  }
 };
 
 const drawAudioVisuals = (ctx, streamsContainer) => {
   const freaquencyData = streamsContainer.analyseAudioFrequencyData();
   const averageVolume = streamsContainer.calculateAverageVolume(freaquencyData);
   drawAverageVolume(averageVolume, ctx);
+  drawFrequencies(freaquencyData, ctx, 70);
 };
 
 const drawTextLines = params => {
