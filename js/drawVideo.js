@@ -85,7 +85,7 @@ const drawVideo = (streamsContainer, time) => {
   // set the resolution
   gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
   // set time
-  const timeLocation = gl.getUniformLocation(program, "time");
+  const timeLocation = gl.getUniformLocation(program, "u_time");
   gl.uniform1f(timeLocation, time);
   // Draw the rectangle.
   var primitiveType = gl.TRIANGLES;
