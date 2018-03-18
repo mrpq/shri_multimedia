@@ -9,11 +9,11 @@ const drawRunningText = (
   canvasHeight,
   currTime
 ) => {
-  ctx.fillStyle = color;
+  ctx.fillStyle = "color";
   const timePassed = currTime - prevTime;
   if (timePassed / 10 > 0.15) {
     text += runningText[textIndex];
-    ctx.clearRect(0, canvasHeight - 100, canvasWidth, canvasHeight);
+    // ctx.clearRect(0, canvasHeight - 100, canvasWidth, canvasHeight);
     drawTextLines({
       ctx,
       text,
@@ -32,7 +32,7 @@ const drawRunningText = (
 };
 
 const drawAverageVolume = (average, ctx) => {
-  ctx.clearRect(510, 0, 200, 200);
+  // ctx.clearRect(510, 0, 200, 200);
   ctx.fillStyle = "rgb(255,255,255)";
   ctx.fillRect(512, 0, average * 2, 20);
 };
@@ -42,7 +42,6 @@ const drawFrequencies = (freaquencyData, ctx, ancor) => {
   freaquencyData = freaquencyData.slice(0, 500);
   const frequenciesBoxWidth = 140;
   const barWidth = frequenciesBoxWidth / freaquencyData.length;
-  console.log(barWidth);
   for (let i = 0; i < freaquencyData.length; i += 1) {
     const k = 6;
     const level = freaquencyData[i] / k;
@@ -74,7 +73,10 @@ const drawTexture = (streamsContainer, time) => {
   const canvas = texCanvasElem;
   const video = videoElem;
   const ctx = canvas.getContext("2d");
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawRunningText(ctx, "#ffffff", canvas.width, canvas.height, time);
   drawAudioVisuals(ctx, streamsContainer);
+  ctx.globalCompositeOperation = "destination-over";
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  ctx.globalCompositeOperation = "source-over";
 };
