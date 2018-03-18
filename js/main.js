@@ -1,3 +1,7 @@
+const videoTagId = "video";
+const texCanvasId = "texCanvas";
+const displayCanvasId = "webglCanvas";
+
 const draw = (streamsContainer, time = 0) => {
   drawVideo(streamsContainer, time);
   // drawInterface(streamsContainer, time);
@@ -15,7 +19,7 @@ const main = () => {
         mediaStream: stream,
         video: true,
         audio: true,
-        selector: "video"
+        selector: videoTagId
       });
       return streamsContainer;
     })
