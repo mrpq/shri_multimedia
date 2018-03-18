@@ -1,7 +1,14 @@
+// Селекторы
 const videoTagId = "video";
 const texCanvasId = "texCanvas";
 const displayCanvasId = "webglCanvas";
 
+// Дом элементы
+const videoElem = document.getElementById(videoTagId);
+const texCanvasElem = document.getElementById(texCanvasId);
+const displayCanvasElem = document.getElementById(displayCanvasId);
+
+// текстовка для интерфейса
 const runningText = `1  STARTMESSAGE: DB 'SYSTEM INFORMATION:' NEWLINE: DB 13, 0
 2  CPUSTRINGMSG: DB 'CPU STRING: ', 0
 3  NUMCORESMSG: DB 13, 'NUMBER OF CORES: ', 0
