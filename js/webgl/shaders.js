@@ -5,8 +5,6 @@ precision mediump float;
 uniform sampler2D texture;
 // time
 uniform float time;
-// shouldGlitch
-uniform float u_shouldGlitch;
 
 // the texCoords passed in from the vertex shader.
 varying vec2 v_texCoord;

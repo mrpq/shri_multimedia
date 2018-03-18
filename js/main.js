@@ -90,12 +90,11 @@ const drawVideo = (streamsContainer, time) => {
   // Bind the position buffer.
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-  // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-  var size = 2; // 2 components per iteration
-  var type = gl.FLOAT; // the data is 32bit floats
-  var normalize = false; // don't normalize the data
-  var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
-  var offset = 0; // start at the beginning of the buffer
+  var size = 2;
+  var type = gl.FLOAT;
+  var normalize = false;
+  var stride = 0;
+  var offset = 0;
   gl.vertexAttribPointer(
     positionLocation,
     size,
@@ -105,18 +104,15 @@ const drawVideo = (streamsContainer, time) => {
     offset
   );
 
-  // Turn on the teccord attribute
   gl.enableVertexAttribArray(texcoordLocation);
 
-  // Bind the position buffer.
   gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
 
-  // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-  var size = 2; // 2 components per iteration
-  var type = gl.FLOAT; // the data is 32bit floats
-  var normalize = false; // don't normalize the data
-  var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
-  var offset = 0; // start at the beginning of the buffer
+  var size = 2;
+  var type = gl.FLOAT;
+  var normalize = false;
+  var stride = 0;
+  var offset = 0;
   gl.vertexAttribPointer(
     texcoordLocation,
     size,
@@ -131,11 +127,6 @@ const drawVideo = (streamsContainer, time) => {
   // set time
   const timeLocation = gl.getUniformLocation(program, "time");
   gl.uniform1f(timeLocation, time);
-  // shouldGlitch
-  const shouldGlitch = gl.getUniformLocation(program, "u_shouldGlitch");
-  const r = Math.random();
-  gl.uniform1f(shouldGlitch, r);
-
   // Draw the rectangle.
   var primitiveType = gl.TRIANGLES;
   var offset = 0;
