@@ -3,23 +3,25 @@ const drawVideo = (streamsContainer, time) => {
   const canvas = displayCanvasElem;
   const gl = canvas.getContext("webgl");
   if (!gl) {
+    alert("Ваш браузер не потдерживает webl");
     return;
   }
 
-  // setup GLSL program
+  // Создаем программу
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertCode);
   const fragmentShader = createShader(
     gl,
     gl.FRAGMENT_SHADER,
-    Math.random() > 0.05 ? fragCodeNoise : fragCodeGlitch
+    Math.random() > 0.008 ? fragCodeNoise : fragCodeGlitch
   );
-  const program = createProgram(gl, vertexShader, fragmentShader);
 
+  const program = createProgram(gl, vertexShader, fragmentShader);
+  // получаем локейшн соответствующих аттрибутов
   const positionLocation = gl.getAttribLocation(program, "a_position");
   const texcoordLocation = gl.getAttribLocation(program, "a_texCoord");
 
+  // создаем буфер под данные для вершин, наполняем данными
   const positionBuffer = gl.createBuffer();
-
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   setRectangle(gl, 0, 0, canvas.width, canvas.height);
 
