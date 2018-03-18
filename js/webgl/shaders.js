@@ -9,12 +9,7 @@ uniform float u_time;
 // the texCoords passed in from the vertex shader.
 varying vec2 v_texCoord;
 
-/////////////
-// uniform float time;
-// uniform sampler2D texture;
-
-varying vec2 fresolution;
-varying vec2 vUv;
+varying vec2 v_resolution;
 
 float random(vec2 c){
   return fract(sin(dot(c.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -128,8 +123,7 @@ attribute vec2 a_texCoord;
 uniform vec2 u_resolution;
 
 varying vec2 v_texCoord;
-varying vec2 vUv;
-varying vec2 fresolution;
+varying vec2 v_resolution;
 void main() {
    // convert the rectangle from pixels to 0.0 to 1.0
    vec2 zeroToOne = a_position / u_resolution;
@@ -143,8 +137,7 @@ void main() {
    gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
    v_texCoord = a_texCoord;
-   vUv = a_texCoord;
-   fresolution = u_resolution;
+   v_resolution = u_resolution;
 }
 `;
 
@@ -154,7 +147,7 @@ ${fragCodeCommon}
 
 void main() {
   float strength = smoothstep(interval * 0.5, interval, interval - mod(u_time, interval));
-  float whiteNoise = (random(vUv + mod(u_time, 10.0)) * 2.0 - 1.0) * (0.15 + strength * 0.15);
+  float whiteNoise = (random(v_texCoord + mod(u_time, 10.0)) * 2.0 - 1.0) * (0.15 + strength * 0.15);
    gl_FragColor = vec4(texture2D(u_texture, v_texCoord).r + whiteNoise, 0, 0, 1);
 }
 `;
@@ -168,43 +161,43 @@ void main(void){
   vec2 shake = vec2(strength * 8.0 + 0.5) * vec2(
     random(vec2(u_time)) * 2.0 - 1.0,
     random(vec2(u_time * 2.0)) * 2.0 - 1.0
-  ) / fresolution;
+  ) / v_resolution;
 
-  float y = vUv.y * fresolution.y;
+  float y = v_texCoord.y * v_resolution.y;
   float rgbWave = (
       snoise3(vec3(0.0, y * 0.01, u_time * 400.0)) * (2.0 + strength * 32.0)
       * snoise3(vec3(0.0, y * 0.02, u_time * 200.0)) * (1.0 + strength * 4.0)
       + step(0.9995, sin(y * 0.005 + u_time * 1.6)) * 12.0
       + step(0.9999, sin(y * 0.005 + u_time * 2.0)) * -18.0
-    ) / fresolution.x;
-  float rgbDiff = (6.0 + sin(u_time * 500.0 + vUv.y * 40.0) * (20.0 * strength + 1.0)) / fresolution.x;
-  float rgbUvX = vUv.x + rgbWave;
-  float r = texture2D(u_texture, vec2(rgbUvX + rgbDiff, vUv.y) + shake).r;
-  float g = texture2D(u_texture, vec2(rgbUvX, vUv.y) + shake).g;
-  float b = texture2D(u_texture, vec2(rgbUvX - rgbDiff, vUv.y) + shake).b;
+    ) / v_resolution.x;
+  float rgbDiff = (6.0 + sin(u_time * 500.0 + v_texCoord.y * 40.0) * (20.0 * strength + 1.0)) / v_resolution.x;
+  float rgbUvX = v_texCoord.x + rgbWave;
+  float r = texture2D(u_texture, vec2(rgbUvX + rgbDiff, v_texCoord.y) + shake).r;
+  float g = texture2D(u_texture, vec2(rgbUvX, v_texCoord.y) + shake).g;
+  float b = texture2D(u_texture, vec2(rgbUvX - rgbDiff, v_texCoord.y) + shake).b;
 
-  float whiteNoise = (random(vUv + mod(u_time, 10.0)) * 2.0 - 1.0) * (0.15 + strength * 0.15);
+  float whiteNoise = (random(v_texCoord + mod(u_time, 10.0)) * 2.0 - 1.0) * (0.15 + strength * 0.15);
 
   float bnTime = floor(u_time * 20.0) * 200.0;
-  float noiseX = step((snoise3(vec3(0.0, vUv.x * 3.0, bnTime)) + 1.0) / 2.0, 0.12 + strength * 0.3);
-  float noiseY = step((snoise3(vec3(0.0, vUv.y * 3.0, bnTime)) + 1.0) / 2.0, 0.12 + strength * 0.3);
+  float noiseX = step((snoise3(vec3(0.0, v_texCoord.x * 3.0, bnTime)) + 1.0) / 2.0, 0.12 + strength * 0.3);
+  float noiseY = step((snoise3(vec3(0.0, v_texCoord.y * 3.0, bnTime)) + 1.0) / 2.0, 0.12 + strength * 0.3);
   float bnMask = noiseX * noiseY;
-  float bnUvX = vUv.x + sin(bnTime) * 0.2 + rgbWave;
-  float bnR = texture2D(u_texture, vec2(bnUvX + rgbDiff, vUv.y)).r * bnMask;
-  float bnG = texture2D(u_texture, vec2(bnUvX, vUv.y)).g * bnMask;
-  float bnB = texture2D(u_texture, vec2(bnUvX - rgbDiff, vUv.y)).b * bnMask;
+  float bnUvX = v_texCoord.x + sin(bnTime) * 0.2 + rgbWave;
+  float bnR = texture2D(u_texture, vec2(bnUvX + rgbDiff, v_texCoord.y)).r * bnMask;
+  float bnG = texture2D(u_texture, vec2(bnUvX, v_texCoord.y)).g * bnMask;
+  float bnB = texture2D(u_texture, vec2(bnUvX - rgbDiff, v_texCoord.y)).b * bnMask;
   vec4 blockNoise = vec4(bnR, bnG, bnB, 1.0);
 
   float bnTime2 = floor(u_time * 25.0) * 300.0;
-  float noiseX2 = step((snoise3(vec3(0.0, vUv.x * 2.0, bnTime2)) + 1.0) / 2.0, 0.12 + strength * 0.5);
-  float noiseY2 = step((snoise3(vec3(0.0, vUv.y * 8.0, bnTime2)) + 1.0) / 2.0, 0.12 + strength * 0.3);
+  float noiseX2 = step((snoise3(vec3(0.0, v_texCoord.x * 2.0, bnTime2)) + 1.0) / 2.0, 0.12 + strength * 0.5);
+  float noiseY2 = step((snoise3(vec3(0.0, v_texCoord.y * 8.0, bnTime2)) + 1.0) / 2.0, 0.12 + strength * 0.3);
   float bnMask2 = noiseX2 * noiseY2;
-  float bnR2 = texture2D(u_texture, vec2(bnUvX + rgbDiff, vUv.y)).r * bnMask2;
-  float bnG2 = texture2D(u_texture, vec2(bnUvX, vUv.y)).g * bnMask2;
-  float bnB2 = texture2D(u_texture, vec2(bnUvX - rgbDiff, vUv.y)).b * bnMask2;
+  float bnR2 = texture2D(u_texture, vec2(bnUvX + rgbDiff, v_texCoord.y)).r * bnMask2;
+  float bnG2 = texture2D(u_texture, vec2(bnUvX, v_texCoord.y)).g * bnMask2;
+  float bnB2 = texture2D(u_texture, vec2(bnUvX - rgbDiff, v_texCoord.y)).b * bnMask2;
   vec4 blockNoise2 = vec4(bnR2, bnG2, bnB2, 1.0);
 
-  float waveNoise = (sin(vUv.y * 1200.0) + 1.0) / 2.0 * (0.15 + strength * 0.2);
+  float waveNoise = (sin(v_texCoord.y * 1200.0) + 1.0) / 2.0 * (0.15 + strength * 0.2);
 
   gl_FragColor = vec4(r, 0, 0, 1.0) * (1.0 - bnMask - bnMask2) + (whiteNoise + blockNoise + blockNoise2 - waveNoise);
   // gl_FragColor = vec4(r, g, b, 1.0);
