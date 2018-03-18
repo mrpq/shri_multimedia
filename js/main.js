@@ -145,7 +145,7 @@ const drawVideo = (streamsContainer, time) => {
 
 const draw = (streamsContainer, time = 0) => {
   drawTexture(streamsContainer, time);
-  // drawInterface(streamsContainer, time);
+  drawInterface(streamsContainer, time);
   drawVideo(streamsContainer, time);
   requestAnimationFrame(time => draw(streamsContainer, time));
 };

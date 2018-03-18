@@ -74,9 +74,13 @@ const drawTexture = (streamsContainer, time) => {
   const video = videoElem;
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+};
+
+const drawInterface = (streamsContainer, time) => {
+  const canvas = interfaceCanvasElem;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawRunningText(ctx, "#ffffff", canvas.width, canvas.height, time);
   drawAudioVisuals(ctx, streamsContainer);
-  ctx.globalCompositeOperation = "destination-over";
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  ctx.globalCompositeOperation = "source-over";
 };

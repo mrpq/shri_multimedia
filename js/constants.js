@@ -1,11 +1,13 @@
 // Селекторы
 const videoTagId = "video";
 const texCanvasId = "texCanvas";
+const interfaceCanvasId = "interfaceCanvas";
 const displayCanvasId = "webglCanvas";
 
 // Дом элементы
 const videoElem = document.getElementById(videoTagId);
 const texCanvasElem = document.getElementById(texCanvasId);
+const interfaceCanvasElem = document.getElementById(interfaceCanvasId);
 const displayCanvasElem = document.getElementById(displayCanvasId);
 
 //
