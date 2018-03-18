@@ -125,14 +125,14 @@ const vertCode = `
 attribute vec2 a_position;
 attribute vec2 a_texCoord;
 
-uniform vec2 resolution;
+uniform vec2 u_resolution;
 
 varying vec2 v_texCoord;
 varying vec2 vUv;
 varying vec2 fresolution;
 void main() {
    // convert the rectangle from pixels to 0.0 to 1.0
-   vec2 zeroToOne = a_position / resolution;
+   vec2 zeroToOne = a_position / u_resolution;
 
    // convert from 0->1 to 0->2
    vec2 zeroToTwo = zeroToOne * 2.0;
@@ -144,7 +144,7 @@ void main() {
 
    v_texCoord = a_texCoord;
    vUv = a_texCoord;
-   fresolution = resolution;
+   fresolution = u_resolution;
 }
 `;
 

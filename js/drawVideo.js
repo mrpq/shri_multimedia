@@ -12,7 +12,7 @@ const drawVideo = (streamsContainer, time) => {
   const fragmentShader = createShader(
     gl,
     gl.FRAGMENT_SHADER,
-    Math.random() > 0.008 ? fragCodeNoise : fragCodeGlitch
+    Math.random() > 0.05 ? fragCodeNoise : fragCodeGlitch
   );
 
   const program = createProgram(gl, vertexShader, fragmentShader);
@@ -23,50 +23,19 @@ const drawVideo = (streamsContainer, time) => {
   // создаем буфер под данные для вершин, наполняем данными
   const positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-  setRectangle(gl, 0, 0, canvas.width, canvas.height);
+  setVerices(gl, 0, 0, canvas.width, canvas.height);
 
-  const texcoordBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
-  gl.bufferData(
-    gl.ARRAY_BUFFER,
-    new Float32Array([
-      0.0,
-      0.0,
-      1.0,
-      0.0,
-      0.0,
-      1.0,
-      0.0,
-      1.0,
-      1.0,
-      0.0,
-      1.0,
-      1.0
-    ]),
-    gl.STATIC_DRAW
-  );
+  // создаем буфер под данные для координат текстуры, наполняем данными
+  const texCoordBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+  setTexCoords(gl);
 
-  // Create a texture.
+  // Создаем текстуру.
   const texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, texture);
+  setTexture(gl, texCanvas);
 
-  // Set the parameters so we can render any size image.
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-
-  // Upload the image into the texture.
-  gl.texImage2D(
-    gl.TEXTURE_2D,
-    0,
-    gl.RGBA,
-    gl.RGBA,
-    gl.UNSIGNED_BYTE,
-    texCanvas
-  );
-
-  const resolutionLocation = gl.getUniformLocation(program, "resolution");
+  const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
 
   // webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -97,7 +66,7 @@ const drawVideo = (streamsContainer, time) => {
 
   gl.enableVertexAttribArray(texcoordLocation);
 
-  gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+  gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
 
   var size = 2;
   var type = gl.FLOAT;
