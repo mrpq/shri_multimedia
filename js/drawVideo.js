@@ -35,19 +35,13 @@ const drawVideo = (streamsContainer, time) => {
   gl.bindTexture(gl.TEXTURE_2D, texture);
   setTexture(gl, texCanvas);
 
-  const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
-
   // webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
   gl.clearColor(0, 0, 0, 0);
   gl.clear(gl.COLOR_BUFFER_BIT);
-
   gl.useProgram(program);
 
   gl.enableVertexAttribArray(positionLocation);
-
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   var size = 2;
@@ -65,7 +59,6 @@ const drawVideo = (streamsContainer, time) => {
   );
 
   gl.enableVertexAttribArray(texcoordLocation);
-
   gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
 
   var size = 2;
@@ -83,6 +76,7 @@ const drawVideo = (streamsContainer, time) => {
   );
 
   // set the resolution
+  const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
   gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
   // set time
   const timeLocation = gl.getUniformLocation(program, "u_time");
